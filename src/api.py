@@ -43,8 +43,6 @@ def list_all_jobs():
 
 def create_all_jobs():
     dbt_api_token = get_dbt_api_token()
-    dbt_account_id = get_dbt_account_id()
-    dbt_project_id = get_dbt_project_id()
     base_url = get_base_url()
 
     headers = {
@@ -53,39 +51,50 @@ def create_all_jobs():
     }
 
     configured_jobs = get_configured_jobs()
-    for job in configured_jobs[:1]:
-        payload = {
-            "id": None,  # required due to api bug
-            "account_id": dbt_account_id,
-            "project_id": dbt_project_id,
-            "environment_id": job["environment_id"],
-            "name": job["name"],
-            "execute_steps": job["steps"],
-            "dbt_version": None,  # use environment's
-            "triggers": {
-                "github_webhook": False,
-                "schedule": True,
-                "custom_branch_only": False
-            },
-            "settings": {
-                "threads": 4,
-                "target_name": "prod"
-            },
-            "state": 1,
-            "generate_docs": False,
-            "schedule": {
-                "date": {
-                    "type": "custom_cron",
-                    "cron": job["cron"]
-                },
-                # this does not actually do anyting, but we have to leave it for the api to behave
-                "time": {"type": "every_hour", "interval": 1}
-            }
-        }
+    for job in configured_jobs:
+        payload = get_base_payload()
+        for key, value in job.items():
+            if key != "description":
+                payload[key] = value
+        payload["schedule"]["time"] = {"type": "every_hour", "interval": 1}
+
         response = requests.post(
             base_url, headers=headers, json=payload)
-        print(response.status_code)
         print(response.text)
+
+
+def get_base_payload():
+    dbt_account_id = get_dbt_account_id()
+    dbt_project_id = get_dbt_project_id()
+    payload = {
+        "id": None,  # required due to api bug
+        "account_id": dbt_account_id,
+        "project_id": dbt_project_id,
+        "environment_id": None,
+        "name": None,
+        "execute_steps": None,
+        "dbt_version": None,  # use environment's
+        "triggers": {
+            "github_webhook": False,
+            "schedule": True,
+            "custom_branch_only": False
+        },
+        "settings": {
+            "threads": 4,
+            "target_name": "prod"
+        },
+        "state": 1,
+        "generate_docs": False,
+        "schedule": {
+            "date": {
+                "type": "custom_cron",
+                "cron": None
+            },
+            # this does not actually do anyting, but we have to leave it for the api to behave
+            "time": {"type": "every_hour", "interval": 1}
+        }
+    }
+    return payload
 
 
 if __name__ == "__main__":

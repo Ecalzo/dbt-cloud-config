@@ -11,7 +11,7 @@ def read_jobs_yaml():
 
 def validate_yaml_contents(yaml_contents: dict):
     job_level_keys = ["name", "description",
-                      "environment_id", "threads", "target_name", "steps"]
+                      "environment_id", "settings", "triggers", "schedule", "execute_steps"]
     try:
         jobs = yaml_contents["jobs"]
     except KeyError:
@@ -36,4 +36,4 @@ def get_configured_jobs():
 
 
 if __name__ == "__main__":
-    read_jobs_yaml()
+    print(read_jobs_yaml())
