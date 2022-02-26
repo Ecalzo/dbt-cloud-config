@@ -1,0 +1,19 @@
+jobs:
+  - name: production job
+    description: job that runs our production models
+    environment_id: 68525
+    threads: 4
+    target_name: prodi
+    schedule_cron: 0 1 * * *
+    steps:
+      - dbt run
+      - dbt test
+
+  - name: production job 2
+    description: job that runs our production models
+    environment_id: 68525
+    threads: 4
+    target_name: prod
+    steps:
+      - dbt run
+      - dbt test
