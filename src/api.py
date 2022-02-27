@@ -60,14 +60,16 @@ def update_job(job_meta):
         "Authorization": f"Token {dbt_api_token}"
     }
     # append the job id that we want to update
-    base_url += "/" + str(existing_config["id"])
+    base_url += str(existing_config["id"]) + "/"
     print(base_url)
     payload = get_base_payload()
     for key, value in job_config.items():
         if key != "description":
             payload[key] = value
     payload["schedule"]["time"] = {"type": "every_hour", "interval": 1}
-
+    payload["id"] = existing_config["id"]
+    import pdb
+    pdb.set_trace()
     response = requests.post(
         base_url, headers=headers, json=payload)
     response.raise_for_status()
