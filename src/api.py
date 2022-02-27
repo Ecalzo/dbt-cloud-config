@@ -41,7 +41,7 @@ def list_all_jobs():
     return requests.get(base_url, headers=headers).json()["data"]
 
 
-def create_all_jobs():
+def create_job(job_config):
     dbt_api_token = get_dbt_api_token()
     base_url = get_base_url()
 
@@ -50,17 +50,16 @@ def create_all_jobs():
         "Authorization": f"Token {dbt_api_token}"
     }
 
-    configured_jobs = get_configured_jobs()
-    for job in configured_jobs:
-        payload = get_base_payload()
-        for key, value in job.items():
-            if key != "description":
-                payload[key] = value
-        payload["schedule"]["time"] = {"type": "every_hour", "interval": 1}
+    payload = get_base_payload()
+    for key, value in job_config.items():
+        if key != "description":
+            payload[key] = value
+    payload["schedule"]["time"] = {"type": "every_hour", "interval": 1}
 
-        response = requests.post(
-            base_url, headers=headers, json=payload)
-        print(response.text)
+    response = requests.post(
+        base_url, headers=headers, json=payload)
+    response.raise_for_status()
+    print(response.text)
 
 
 def get_base_payload():
@@ -95,7 +94,3 @@ def get_base_payload():
         }
     }
     return payload
-
-
-if __name__ == "__main__":
-    create_all_jobs()
