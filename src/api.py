@@ -41,6 +41,14 @@ def list_all_jobs():
     return requests.get(base_url, headers=headers).json()["data"]
 
 
+def create_or_update_cloud_jobs(changelog):
+    for job_name, job_meta in changelog.items():
+        if job_meta["mode"] == "create":
+            create_job(job_meta["configured"])
+        if job_meta["mode"] == "update":
+            update_job(job_meta["configured"])
+
+
 def create_job(job_config):
     dbt_api_token = get_dbt_api_token()
     base_url = get_base_url()
