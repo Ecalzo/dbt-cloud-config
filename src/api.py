@@ -46,18 +46,21 @@ def create_or_update_cloud_jobs(changelog):
         if job_meta["mode"] == "create":
             create_job(job_meta["configured"])
         if job_meta["mode"] == "update":
-            update_job(job_meta["configured"])
+            if job_meta.get("configured", None):
+                update_job(job_meta)
 
 
-def update_job(job_config):
+def update_job(job_meta):
     dbt_api_token = get_dbt_api_token()
     base_url = get_base_url()
+    existing_config = job_meta["existing"]
+    job_config = job_meta["configured"]
     headers = {
         "Accept": "application/json",
         "Authorization": f"Token {dbt_api_token}"
     }
     # append the job id that we want to update
-    base_url += "/" + job_config["existing"]["id"]
+    base_url += "/" + str(existing_config["id"])
     print(base_url)
     payload = get_base_payload()
     for key, value in job_config.items():
