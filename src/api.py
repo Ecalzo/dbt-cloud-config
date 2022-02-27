@@ -49,6 +49,28 @@ def create_or_update_cloud_jobs(changelog):
             update_job(job_meta["configured"])
 
 
+def update_job(job_config):
+    dbt_api_token = get_dbt_api_token()
+    base_url = get_base_url()
+    headers = {
+        "Accept": "application/json",
+        "Authorization": f"Token {dbt_api_token}"
+    }
+    # append the job id that we want to update
+    base_url += "/" + job_config["existing"]["id"]
+    print(base_url)
+    payload = get_base_payload()
+    for key, value in job_config.items():
+        if key != "description":
+            payload[key] = value
+    payload["schedule"]["time"] = {"type": "every_hour", "interval": 1}
+
+    response = requests.post(
+        base_url, headers=headers, json=payload)
+    response.raise_for_status()
+    print(response.text)
+
+
 def create_job(job_config):
     dbt_api_token = get_dbt_api_token()
     base_url = get_base_url()
@@ -102,3 +124,7 @@ def get_base_payload():
         }
     }
     return payload
+
+
+if __name__ == "__main__":
+    print(list_all_jobs())
