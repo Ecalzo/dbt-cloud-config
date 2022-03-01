@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch
 
-from src.changelog import create_changelog
+from src.changelog import create_changelog, create_changelog_mapping
 from src.yaml_parser import get_configured_jobs
 
 
@@ -31,3 +31,11 @@ def test_create_changelog(configured_jobs, cloud_jobs):
         assert changelog[k]['diff']['dictionary_item_removed'][0] == "root['project_id']"
         assert changelog[k]['diff']['values_changed'] == {"root['settings']['threads']": {
             'new_value': 4, 'old_value': 5}, "root['schedule']['date']['cron']": {'new_value': '0 1 * * *', 'old_value': '0 2 * * *'}}
+
+
+def test_create_changelog_mapping(configured_jobs, cloud_jobs):
+    change_map = create_changelog_mapping(cloud_jobs, configured_jobs)
+    for k, v in change_map.items():
+        assert "existing" in change_map[k]
+        assert "mode" in change_map[k]
+        assert "configured" in change_map[k]

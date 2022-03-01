@@ -19,6 +19,21 @@ def create_changelog(cloud_jobs, configured_jobs):
     return diff
 
 
+def create_changelog_mapping(current_project_jobs, configured_jobs):
+    change_map = defaultdict(dict)
+    for cloud_job in current_project_jobs:
+        change_map[cloud_job["name"]]["existing"] = cloud_job
+        change_map[cloud_job["name"]]["mode"] = "update"
+
+    for config_job in configured_jobs:
+        if config_job["name"] not in change_map:
+            # if there is no existing version of this conf, set create mode
+            change_map[config_job["name"]]["existing"] = {}
+            change_map[config_job["name"]]["mode"] = "create"
+        change_map[config_job["name"]]["configured"] = config_job
+    return change_map
+
+
 def compare_jobs(current_jobs, configured_jobs):
     job_map = defaultdict(dict)
     for cloud_job in current_jobs:
