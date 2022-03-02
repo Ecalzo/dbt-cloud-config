@@ -1,7 +1,8 @@
 import pytest
 from unittest.mock import patch
+from deepdiff.diff import DeepDiff
 
-from src.changelog import create_changelog, create_changelog_mapping
+from src.changelog import create_changelog, create_changelog_mapping, compare_jobs
 from src.yaml_parser import get_configured_jobs
 
 
@@ -39,3 +40,10 @@ def test_create_changelog_mapping(configured_jobs, cloud_jobs):
         assert "existing" in change_map[k]
         assert "mode" in change_map[k]
         assert "configured" in change_map[k]
+
+
+def test_compare_jobs(configured_jobs, cloud_jobs):
+    change_map = compare_jobs(cloud_jobs, configured_jobs)
+    for k, v in change_map.items():
+        assert "diff" in v
+        assert type(v["diff"]) == DeepDiff
