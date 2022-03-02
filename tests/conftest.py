@@ -1,9 +1,19 @@
 import pytest
+import os
+
 from src.yaml_parser import get_configured_jobs
+from src.changelog import create_changelog
 
 
 def mock_get_dbt_project_id():
     return 100
+
+
+@pytest.fixture(autouse=True)
+def set_env_variables():
+    os.environ["DBT_ACCOUNT_ID"] = "48682"
+    os.environ["DBT_PROJECT_ID"] = "100"
+    os.environ["DBT_API_TOKEN"] = "asdfsdf32423423"
 
 
 @pytest.fixture
