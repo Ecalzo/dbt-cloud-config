@@ -1,6 +1,7 @@
 import os
 import pytest
-from src.api import get_base_url, get_dbt_api_token, get_dbt_project_id
+from unittest.mock import patch
+from src.api import create_or_update_cloud_jobs, get_base_url, get_dbt_api_token, get_dbt_project_id
 
 
 def test_get_base_url_exception():
@@ -25,3 +26,13 @@ def test_get_base_url():
     dbt_account_id = os.getenv("DBT_ACCOUNT_ID")
     url = f"https://cloud.getdbt.com/api/v2/accounts/{dbt_account_id}/jobs/"
     assert url == get_base_url()
+
+
+@patch("src.api.create_job")
+@patch("src.api.update_job")
+def test_create_or_update_cloud_jobs(mock_update_job, mock_create_job, changelog):
+    create_or_update_cloud_jobs(changelog)
+    assert mock_update_job.called
+    for k, v in changelog.items():
+        assert mock_update_job.calledwith(v)
+    assert not mock_create_job.called

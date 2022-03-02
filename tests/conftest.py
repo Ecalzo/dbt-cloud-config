@@ -29,3 +29,8 @@ def cloud_jobs():
     base_jobs[0]["schedule"]["date"]["cron"] = "0 2 * * *"
     base_jobs[0]["project_id"] = mock_get_dbt_project_id()
     return base_jobs
+
+
+@pytest.fixture
+def changelog(configured_jobs, cloud_jobs):
+    return create_changelog(cloud_jobs, configured_jobs)
