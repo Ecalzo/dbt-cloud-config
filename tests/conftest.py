@@ -28,6 +28,7 @@ def cloud_jobs():
     base_jobs[0]["settings"]["threads"] = 5
     base_jobs[0]["schedule"]["date"]["cron"] = "0 2 * * *"
     base_jobs[0]["project_id"] = mock_get_dbt_project_id()
+    base_jobs[0]["id"] = "1234"
     return base_jobs
 
 

@@ -1,7 +1,7 @@
 import os
 import pytest
 from unittest.mock import patch
-from src.api import create_or_update_cloud_jobs, get_base_url, get_dbt_api_token, get_dbt_project_id, create_job, make_post_request
+from src.api import create_or_update_cloud_jobs, get_base_url, get_dbt_api_token, get_dbt_project_id, create_job, update_job
 
 
 def test_get_base_url_exception():
@@ -43,3 +43,15 @@ def test_create_job(mock_make_post_request, changelog):
     job_config = changelog[list(changelog.keys())[0]]
     create_job(job_config)
     assert mock_make_post_request.called
+
+
+@patch("src.api.make_post_request")
+def test_update_job(mock_make_post_request, changelog):
+    job_config = changelog[list(changelog.keys())[0]]
+    update_job(job_config)
+    assert mock_make_post_request.called
+    call_args = mock_make_post_request.call_args.kwargs
+    assert call_args["json_payload"]["id"] is not None
+    assert "description" not in call_args["json_payload"]
+    assert call_args["url"].endswith("/")
+    assert call_args["url"].endswith(call_args["json_payload"]["id"] + "/")
