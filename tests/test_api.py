@@ -1,7 +1,7 @@
 import os
 import pytest
 from unittest.mock import patch
-from src.api import create_or_update_cloud_jobs, get_base_url, get_dbt_api_token, get_dbt_project_id
+from src.api import create_or_update_cloud_jobs, get_base_url, get_dbt_api_token, get_dbt_project_id, create_job, make_post_request
 
 
 def test_get_base_url_exception():
@@ -36,3 +36,10 @@ def test_create_or_update_cloud_jobs(mock_update_job, mock_create_job, changelog
     for k, v in changelog.items():
         assert mock_update_job.calledwith(v)
     assert not mock_create_job.called
+
+
+@patch("src.api.make_post_request")
+def test_create_job(mock_make_post_request, changelog):
+    job_config = changelog[list(changelog.keys())[0]]
+    create_job(job_config)
+    assert mock_make_post_request.called

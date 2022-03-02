@@ -50,49 +50,40 @@ def create_or_update_cloud_jobs(changelog):
                 update_job(job_meta)
 
 
-def update_job(job_meta):
+def make_post_request(url, json_payload):
     dbt_api_token = get_dbt_api_token()
-    base_url = get_base_url()
-    existing_config = job_meta["existing"]
-    job_config = job_meta["configured"]
     headers = {
         "Accept": "application/json",
         "Authorization": f"Token {dbt_api_token}"
     }
+    return requests.post(url=url, headers=headers, json=json_payload)
+
+
+def update_job(job_meta):
+    base_url = get_base_url()
+    existing_config = job_meta["existing"]
+    job_config = job_meta["configured"]
     # append the job id that we want to update
     base_url += str(existing_config["id"]) + "/"
-    print(base_url)
     payload = get_base_payload()
     for key, value in job_config.items():
         if key != "description":
             payload[key] = value
     payload["schedule"]["time"] = {"type": "every_hour", "interval": 1}
     payload["id"] = existing_config["id"]
-    import pdb
-    pdb.set_trace()
-    response = requests.post(
-        base_url, headers=headers, json=payload)
+    response = make_post_request(url=base_url, json_payload=payload)
     response.raise_for_status()
     print(response.text)
 
 
 def create_job(job_config):
-    dbt_api_token = get_dbt_api_token()
     base_url = get_base_url()
-
-    headers = {
-        "Accept": "application/json",
-        "Authorization": f"Token {dbt_api_token}"
-    }
-
     payload = get_base_payload()
     for key, value in job_config.items():
         if key != "description":
             payload[key] = value
     payload["schedule"]["time"] = {"type": "every_hour", "interval": 1}
-
-    response = requests.post(
-        base_url, headers=headers, json=payload)
+    response = make_post_request(url=base_url, json_payload=payload)
     response.raise_for_status()
     print(response.text)
 
