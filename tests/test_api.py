@@ -33,8 +33,8 @@ def test_get_base_url():
 def test_create_or_update_cloud_jobs(mock_update_job, mock_create_job, changelog):
     create_or_update_cloud_jobs(changelog)
     assert mock_update_job.called
-    for k, v in changelog.items():
-        assert mock_update_job.calledwith(v)
+    update_conf = changelog[list(changelog.keys())[0]]
+    assert mock_update_job.calledwith(update_conf)
     assert not mock_create_job.called
 
 
