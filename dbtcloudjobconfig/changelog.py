@@ -3,19 +3,14 @@
 # compare job names to see what to update
 # if something has changed, update the entire job
 # how to diff check?
-from src.api import get_dbt_project_id
+from .api import get_dbt_project_id
 
 from deepdiff import DeepDiff
 from collections import defaultdict
 
 
 def create_changelog(cloud_jobs, configured_jobs):
-    if not cloud_jobs:
-        return []
-    current_proj_jobs = [
-        job for job in cloud_jobs if job["project_id"] == get_dbt_project_id()
-    ]
-    diff = compare_jobs(current_proj_jobs, configured_jobs)
+    diff = compare_jobs(cloud_jobs, configured_jobs)
     return diff
 
 

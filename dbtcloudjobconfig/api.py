@@ -1,6 +1,6 @@
 import os
 import requests
-from src.yaml_parser import get_configured_jobs
+from .yaml_parser import get_configured_jobs
 
 
 def get_dbt_api_token():

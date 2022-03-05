@@ -1,5 +1,5 @@
 from os.path import exists
-from src.yaml_parser import read_jobs_yaml, validate_yaml_contents
+from dbtcloudjobconfig.yaml_parser import read_jobs_yaml, validate_yaml_contents
 import yaml
 from yaml.loader import SafeLoader
 import pytest
