@@ -1,3 +1,4 @@
+from distutils.command.config import config
 from unittest.mock import patch
 from deepdiff.diff import DeepDiff
 
@@ -20,6 +21,14 @@ def test_create_changelog_mapping(configured_jobs, cloud_jobs):
         assert "existing" in change_map[k]
         assert "mode" in change_map[k]
         assert "configured" in change_map[k]
+
+
+def test_create_changelog_mapping_with_empty_cloud_jobs(configured_jobs):
+    change_map = create_changelog_mapping([], configured_jobs)
+    first_item = change_map[list(change_map.keys())[0]]
+    assert "existing" in first_item
+    assert "mode" in first_item
+    assert "configured" in first_item
 
 
 def test_compare_jobs(configured_jobs, cloud_jobs):
