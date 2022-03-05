@@ -7,8 +7,6 @@ from collections import defaultdict
 
 from deepdiff import DeepDiff
 
-from .api import get_dbt_project_id
-
 
 def create_changelog(cloud_jobs, configured_jobs):
     diff = compare_jobs(cloud_jobs, configured_jobs)

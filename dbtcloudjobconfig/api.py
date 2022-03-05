@@ -2,8 +2,6 @@ import os
 
 import requests
 
-from .yaml_parser import get_configured_jobs
-
 
 def get_dbt_api_token():
     dbt_api_token = os.getenv("DBT_API_TOKEN")

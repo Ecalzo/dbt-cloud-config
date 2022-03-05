@@ -1,5 +1,3 @@
-import os
-
 import yaml
 from yaml.loader import SafeLoader
 
@@ -25,9 +23,10 @@ def validate_yaml_contents(yaml_contents: dict):
                     raise KeyError(f"Expected {key} in {job['name']}")
                 else:
                     raise KeyError(
-                        f"Expected name key in job section")
+                        "Expected name key in job section")
             elif key == "steps" and not job["steps"]:
-                raise Exception(f"jobs section is empty for job {job['name']}")
+                job_name = job["name"]
+                raise Exception(f"jobs section is empty for job {job_name}")
 
 
 def get_configured_jobs():
