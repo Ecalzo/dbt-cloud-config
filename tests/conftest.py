@@ -1,8 +1,8 @@
 import pytest
 import os
 
-from dbtcloudjobconfig.yaml_parser import get_configured_jobs
-from dbtcloudjobconfig.changelog import create_changelog
+from dbtcloudconfig.yaml_parser import get_configured_jobs
+from dbtcloudconfig.changelog import create_changelog
 
 
 def mock_get_dbt_project_id():

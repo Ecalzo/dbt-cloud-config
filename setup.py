@@ -5,12 +5,12 @@ from setuptools import setup, find_packages
 
 
 setup(
-    name='dbtcloudjobconfig',
+    name='dbtcloudconfig',
     version='0.1',
     description='A library to easily configure dbt Cloud jobs',
     author='Evan Calzolaio',
     entry_points={
-        'console_scripts': ['dbtconfig=dbtcloudjobconfig.cli:main'],
+        'console_scripts': ['dbtconfig=dbtcloudconfig.cli:main'],
     },
     packages=find_packages(),
 

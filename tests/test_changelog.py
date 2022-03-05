@@ -1,12 +1,10 @@
-from distutils.command.config import config
 from unittest.mock import patch
 from deepdiff.diff import DeepDiff
 
-from dbtcloudjobconfig.changelog import create_changelog, create_changelog_mapping, compare_jobs
+from dbtcloudconfig.changelog import create_changelog, create_changelog_mapping, compare_jobs
 from tests.conftest import mock_get_dbt_project_id
 
 
-@patch("dbtcloudjobconfig.changelog.get_dbt_project_id", mock_get_dbt_project_id)
 def test_create_changelog(configured_jobs, cloud_jobs):
     changelog = create_changelog(cloud_jobs, configured_jobs)
     for k, v in changelog.items():
