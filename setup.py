@@ -12,7 +12,8 @@ setup(
     entry_points={
         'console_scripts': ['dbtconfig=dbtcloudconfig.cli:main'],
     },
-    packages=find_packages(),
+    packages=find_packages('src'),
+    package_dir={"": "src"},
 
     install_requires=[
         'requests',
