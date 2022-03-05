@@ -8,7 +8,3 @@ def main():
     cloud_jobs = list_all_jobs()
     changelog = create_changelog(cloud_jobs, configured_jobs)
     create_or_update_cloud_jobs(changelog)
-
-
-if __name__ == "__main__":
-    main()
