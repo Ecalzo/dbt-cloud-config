@@ -1,6 +1,7 @@
+import os
+
 import yaml
 from yaml.loader import SafeLoader
-import os
 
 
 def read_jobs_yaml():

@@ -1,5 +1,7 @@
 import os
+
 import requests
+
 from .yaml_parser import get_configured_jobs
 
 
