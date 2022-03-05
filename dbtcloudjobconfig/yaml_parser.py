@@ -9,8 +9,15 @@ def read_jobs_yaml():
 
 
 def validate_yaml_contents(yaml_contents: dict):
-    job_level_keys = ["name", "description",
-                      "environment_id", "settings", "triggers", "schedule", "execute_steps"]
+    job_level_keys = [
+        "name",
+        "description",
+        "environment_id",
+        "settings",
+        "triggers",
+        "schedule",
+        "execute_steps",
+    ]
     try:
         jobs = yaml_contents["jobs"]
     except KeyError:
@@ -22,8 +29,7 @@ def validate_yaml_contents(yaml_contents: dict):
                 if key != "name":
                     raise KeyError(f"Expected {key} in {job['name']}")
                 else:
-                    raise KeyError(
-                        "Expected name key in job section")
+                    raise KeyError("Expected name key in job section")
             elif key == "steps" and not job["steps"]:
                 job_name = job["name"]
                 raise Exception(f"jobs section is empty for job {job_name}")

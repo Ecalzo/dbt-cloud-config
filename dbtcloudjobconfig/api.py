@@ -34,10 +34,7 @@ def list_all_jobs():
     dbt_api_token = get_dbt_api_token()
     base_url = get_base_url()
 
-    headers = {
-        "Accept": "application/json",
-        "Authorization": f"Token {dbt_api_token}"
-    }
+    headers = {"Accept": "application/json", "Authorization": f"Token {dbt_api_token}"}
     return requests.get(base_url, headers=headers).json()["data"]
 
 
@@ -52,10 +49,7 @@ def create_or_update_cloud_jobs(changelog):
 
 def make_post_request(url, json_payload):
     dbt_api_token = get_dbt_api_token()
-    headers = {
-        "Accept": "application/json",
-        "Authorization": f"Token {dbt_api_token}"
-    }
+    headers = {"Accept": "application/json", "Authorization": f"Token {dbt_api_token}"}
     return requests.post(url=url, headers=headers, json=json_payload)
 
 
@@ -102,22 +96,16 @@ def get_base_payload():
         "triggers": {
             "github_webhook": False,
             "schedule": True,
-            "custom_branch_only": False
+            "custom_branch_only": False,
         },
-        "settings": {
-            "threads": 4,
-            "target_name": "prod"
-        },
+        "settings": {"threads": 4, "target_name": "prod"},
         "state": 1,
         "generate_docs": False,
         "schedule": {
-            "date": {
-                "type": "custom_cron",
-                "cron": None
-            },
+            "date": {"type": "custom_cron", "cron": None},
             # this does not actually do anyting, but we have to leave it for the api to behave
-            "time": {"type": "every_hour", "interval": 1}
-        }
+            "time": {"type": "every_hour", "interval": 1},
+        },
     }
     return payload
 
